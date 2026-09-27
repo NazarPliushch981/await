@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        h2 {
+            color: #333;
+            margin-top: 30px;
+        }
+        .result {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-left: 4px solid #4CAF50;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>1</h2>
+    <div class="result" id="task1-res">Виконується</div>
+
+    <h2>2</h2>
+    <div class="result" id="task2-res1">Обчислення[1, 2, 3, 4]...</div>
+    <div class="result" id="task2-res2">Перевірка</div>
+
+    <script>
+        function task1() {
+            return new Promise(function(resolve) {
+                setTimeout(function() {
+                    resolve("завершено")
+                }, 1000)
+            })
+        }
+
+        function task2() {
+            return new Promise(function(resolve) {
+                setTimeout(function() {
+                    resolve("завершено")
+                }, 2000)
+            })
+        }
+
+        function task3() {
+            return new Promise(function(resolve) {
+                setTimeout(function() {
+                    resolve("завершено")
+                }, 3000)
+            })
+        }
+
+        async function executeTasks() {
+            var t1 = await task1()
+            console.log(t1)
+            
+            var t2 = await task2()
+            console.log(t2)
+            
+            var t3 = await task3()
+            console.log(t3)
+        }
+
+        async function main1() {
+            await executeTasks()
+            console.log("завершено")
+            document.getElementById("task1-res").innerText = "completed"
+        }
+
+        main1()
+
+
+        async function sumArrayAsync(array) {
+            if (array.length == 0) {
+                throw new Error("Масив порожній")
+            }
+
+            var sum = 0
+            for (var i = 0; i < array.length; i++) {
+                await new Promise(function(resolve) {
+                    setTimeout(resolve, 1000)
+                })
+                sum = sum + array[i]
+            }
+            return sum
+        }
+
+        async function main2() {
+            try {
+                var res = await sumArrayAsync([1, 2, 3, 4])
+                console.log("Сума:", res)
+                document.getElementById("task2-res1").innerText = "Сума [1, 2, 3, 4]: " + res
+            } catch (err) {
+                console.log(err.message)
+            }
+
+            try {
+                var res2 = await sumArrayAsync([])
+                console.log("Сума:", res2)
+            } catch (err) {
+                console.log("Помилка:", err.message)
+                document.getElementById("task2-res2").innerText = "Помилка " + err.message
+            }
+        }
+
+        main2()
+    </script>
+</body>
+</html>
